@@ -2187,6 +2187,7 @@ Vvveb.Builder = {
 
 		//data['elements'] = new URLSearchParams(data['elements']);
 
+		console.log('fetch saveUrl', saveUrl, 'data',data)
 		return fetch(saveUrl, {
 			method: "POST",  
 			headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -2446,7 +2447,9 @@ Vvveb.Gui = {
 	saveAjax : function (event, saveUrl = null, saveBtn = null) {
 		let btn = saveBtn ?? this;
 		saveUrl = saveUrl ?? this.dataset.vvvebUrl;
+
 		let file = Vvveb.FileManager.getPageData('file');
+
 		//if offcanvas check if user provided new template name
 		if (btn.classList.contains("save-offcanvas")) {
 			if (document.querySelector("#save-offcanvas [name=template]:checked").value == "new") {
@@ -2478,6 +2481,7 @@ Vvveb.Gui = {
 			btn.querySelector(".loading").classList.add("d-none");
 			btn.querySelector(".button-text").classList.remove("d-none");
 		}, (error) => {
+			console.log('saveajax error', error)
 			btn.querySelector(".loading").classList.add("d-none");
 			btn.querySelector(".button-text").classList.remove("d-none");
 			let message = error?.statusText ?? "Error saving!";
@@ -2591,6 +2595,8 @@ Vvveb.Gui = {
 
 			return Vvveb.Builder.saveAjax(data, this.action, function (savedData) {
 					data.title = data.name;
+
+					console.log('savedData',savedData)
 
 					if (typeof savedData === 'object' && savedData !== null) {
 						data.name = savedData.name ?? data.name;
@@ -3783,6 +3789,7 @@ Vvveb.FileManager = {
 	},	
     
 	getPageData: function(key) {
+		console.log('getPageData this.pages', this.pages)
 		if (this.currentPage) {
 			return this.pages[this.currentPage][key];
 		}
